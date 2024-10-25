@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: face-rec-service
+  labels:
+    app: my-apps
+spec:
+  selector:
+    app: my-apps
+  ports:
+    - name: grpc
+      protocol: TCP
+      port: 50051
+      targetPort: 50051
+  type: LoadBalancer

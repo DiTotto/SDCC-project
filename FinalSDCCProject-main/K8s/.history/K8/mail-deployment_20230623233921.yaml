@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mail-deployment
+  labels:
+    io.kompose.service: mail
+    app: my-appz
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-appz
+  template:
+    metadata:
+      labels:
+        app: my-appz
+      annotations:
+        config.linkerd.io/proxy-cpu-limit: '1'
+        config.linkerd.io/proxy-cpu-request: '0.5'
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: mail
+          image: lucamjdimarco/docker-mail:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - "python"
+            - "sendemail.py"
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+            requests:
+              cpu: 500m
+              memory: 1Gi 
+

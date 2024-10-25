@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Signin Template · Bootstrap v5.0</title>
+
+    
+
+    <!-- Bootstrap core CSS -->
+    
+    <!-- <link href="/app/templates/assets/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="../bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+    
+    <!-- Custom styles for this template -->
+    <link href="sign-in.css" rel="stylesheet">
+    
+  </head>
+  <body class="text-center">
+    
+    <main class="form-signin">
+      <form action="{{ url_for('login') }}" method="POST" onsubmit="handleSubmit()">
+      
+        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+        <div class="form-floating">
+          <input type="email" id="email_address" name="email_address" class="form-control" placeholder="name@example.com" required/>
+          <label  for="email_address">Email address</label>
+        </div>
+        <!-- Email Password input -->
+        <div class="form-floating">
+          <input type="text" id="email_password" name="email_password" class="form-control" required/>
+          <label class="form-label" for="email_password">Email Password</label>
+        </div>
+
+        <!-- AWS acess key input -->
+        <div class="form-floating">
+            <input type="text" id="aws_accesskey" name="aws_accesskey" class="form-control" required/>
+            <label class="form-label" for="aws_accesskey">AWS Access Key</label>
+        </div>
+
+        <!-- AWS access key ID input -->
+        <div class="form-floating">
+            <input type="text" id="aws_accesskey_id" name="aws_accesskey_id" class="form-control" required/>
+            <label class="form-label" for="aws_accesskey_id">AWS Access Key ID</label>
+        </div>
+
+          <!-- AWS Session token input -->
+        <div class="form-floating">
+            <input type="text" id="aws_session_token" name="aws_session_token" class="form-control" required />
+            <label class="form-label" for="aws_session_token">AWS Session Token</label>
+        </div>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+      </form>
+    </main>
+
+
+    <script>
+      function handleSubmit() {
+          var aws_accesskey = document.getElementById('aws_accesskey').value;
+          console.log('aws_accesskey:', aws_accesskey);
+          var aws_accesskey_id = document.getElementById('aws_accesskey_id').value;
+          console.log('aws_accesskey_id:', aws_accesskey_id);
+          var aws_session_token = document.getElementById('aws_session_token').value;
+          console.log('aws_session_token:', aws_session_token);
+          var email_address = document.getElementById('email_address').value;
+          console.log('email_address:', email_address);
+          var email_password = document.getElementById('email_password').value;
+          console.log('email_password:', email_password);
+        
+      }
+    </script>
+    
+    <script src="../bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js" ></script>
+    
+     
+  </body>
+</html>

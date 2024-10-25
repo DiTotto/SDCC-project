@@ -1,0 +1,36 @@
+<form action="{{ url_for('login') }}" method="POST">
+    <!-- Email input -->
+    <div class="form-outline mb-4">
+      <input type="email_address" id="form2Example1" class="form-control" />
+      <label class="form-label" for="form2Example1">Email address</label>
+    </div>
+  
+    <!-- Email Password input -->
+    <div class="form-outline mb-4">
+      <input type="email_password" id="email_password" class="form-control" />
+      <label class="form-label" for="email_password">Email Password</label>
+    </div>
+  
+    <!-- AWS acess key input -->
+    <div class="form-outline mb-4">
+        <input type="aws_accesskey" id="aws_accesskey" class="form-control" />
+        <label class="form-label" for="aws_accesskey">AWS Access Key</label>
+    </div>
+
+    <!-- AWS access key ID input -->
+    <div class="form-outline mb-4">
+        <input type="aws_accesskey_id" id="aws_accesskey_id" class="form-control" />
+        <label class="form-label" for="form2Example1">AWS Access Key ID</label>
+    </div>
+
+      <!-- AWS Session token input -->
+    <div class="form-outline mb-4">
+        <input type="aws_session_token" id="form2Example1" class="form-control" />
+        <label class="form-label" for="form2Example1">AWS Session Token</label>
+    </div>
+   
+    <!-- Submit button -->
+    <button type="button" class="btn btn-primary btn-block mb-4">Sign in</button>
+
+  </form>
+  <p>{{error}}</p>

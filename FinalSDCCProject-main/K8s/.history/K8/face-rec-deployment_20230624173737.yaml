@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: face-rec-deployment
+  labels:
+    io.kompose.service: face-rec
+    app: my-apps
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-apps
+  template:
+    metadata:
+      labels:
+        app: my-apps
+      annotations:
+        config.linkerd.io/proxy-cpu-limit: '1'
+        config.linkerd.io/proxy-cpu-request: '0.5'
+        linkerd.io/inject: enabled
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: face-rec
+          image: lucamjdimarco/docker-face-rec:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - "python"
+            - "main.py"
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1.5Gi
+            requests:
+              cpu: 500m
+              memory: 1Gi 

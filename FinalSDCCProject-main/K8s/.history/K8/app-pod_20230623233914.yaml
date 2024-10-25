@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+  labels:
+    app: my-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+      annotations:
+        config.linkerd.io/proxy-cpu-limit: '1'
+        config.linkerd.io/proxy-cpu-request: '0.5'
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: app
+          image: lucamjdimarco/docker-app:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - "python"
+            - "server.py"
+          ports:
+            - containerPort: 5000
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+            requests:
+              cpu: 500m
+              memory: 1Gi 
+      initContainers:
+        - name: init-face-rec-service
+          image: busybox:1.28
+          command: ['sh', '-c', "until nslookup face-rec-service.default.svc.cluster.local; do echo waiting for myservice; sleep 2; done"]
+        - name: init-mail-service
+          image: busybox:1.28
+          command: ['sh', '-c', "until nslookup mail-service.default.svc.cluster.local; do echo waiting for myservice; sleep 2; done"]

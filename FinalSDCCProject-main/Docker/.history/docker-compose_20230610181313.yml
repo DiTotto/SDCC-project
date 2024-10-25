@@ -1,0 +1,61 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - my-network
+  app:
+    image: docker-app
+    build: ./app
+    depends_on:
+      - rabbitmq
+    ports:
+      - "8080:5000"
+    networks:
+      - my-network
+    restart: "no"
+    command: ["./wait-for-it.sh", "rabbitmq:5672", "--", "python", "server.py"]
+  face_rec:
+    image: docker-face_rec
+    build: ./face_rec
+    depends_on:
+      - rabbitmq
+      - app
+    networks:
+      - my-network
+    restart: "no"
+    command: ["./wait-for-it.sh", "app:8080", "--", "python", "main.py"]
+  mail:
+    image: docker-mail
+    build: ./mail
+    depends_on:
+      - rabbitmq
+      - app
+      - face_rec
+    networks:
+      - my-network
+    restart: "no"
+    command: ["./wait-for-it.sh", "app:8080", "--", "python", "sendemail.py"]
+    #command: ["python", "sendemail.py"]
+  dynamodb-local:
+    image: amazon/dynamodb-local:latest
+    container_name: dynamodb-local
+    ports:
+      - "8000:8000"
+
+  dynamodb-admin:
+    image: aaronshaf/dynamodb-admin
+    ports:
+      - "8001:8001"
+    environment:
+      DYNAMO_ENDPOINT: "http://dynamodb-local:8000"
+      AWS_REGION: "us-west-2"
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
+    depends_on:
+      - dynamodb-local
+networks:
+  my-network:

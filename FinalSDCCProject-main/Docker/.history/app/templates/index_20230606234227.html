@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.108.0">
+    <title>Face detector</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/album/">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+    </style>
+
+    
+</head>
+<body>
+    
+<header>
+  <div class="navbar navbar-dark bg-dark shadow-sm">
+    <div class="container">
+      <a href="#" class="navbar-brand d-flex align-items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <strong>Face Detector</strong>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class=" text-center container"> <!--py-5-->
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <!-- <h1 class="fw-light">Album example</h1>-->
+        <h3 >Seleziona una foto</h3> 
+        <!-- <p> -->
+          <!--<a href="#" class="btn btn-primary my-2">Main call to action</a>-->
+          <form name="form" id="form" method="POST" action="/upload" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label for="formFile" class="form-label">Inserisci una foto</label>
+            </div>
+            <div class="mb-3">
+              <input class="form-control" type="file" name="file" id="photo">
+            </div>
+           
+
+
+            <!-- <div class="custom-file">
+              <input id = "photo" type="file" name="file" data-classButton="btn btn-primary" class="custom-file-input">
+
+            </div> -->
+            <button id = "button"  value="Upload" class="btn btn-primary" disabled data-toggle="modal" data-target="#exampleModal">Upload </button> 
+            <!-- type="submit" -->
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  
+                  <div class="modal-body">
+                   
+                      Foto in caricamento
+                      <br>
+                      <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only"></span>
+                      </div>
+                 
+                    
+                  </div>
+                  <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="ModalEmail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  
+                  <div class="modal-body">
+                   
+                      Email inviata
+                      <br>
+                      <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only"></span>
+                      </div>
+                 
+                    
+                  </div>
+                  <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+
+      <!-- <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+              </div>
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" id="inputGroupFile01"
+                  aria-describedby="inputGroupFileAddon01">
+                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+              </div>
+            </div> -->
+          </form>
+        <!-- </p> -->
+      </div>
+    </div>
+  </section>
+
+  <div id = "sfondoazzurro" class="album py-5 ">
+    <div class="container">
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 " id="image-container">
+         <!--class="col"-->
+
+          <!-- <div id="image-container" class="card" style="width: 18rem;">
+            
+            <div class="card-body">
+                <button> Condivido </button>
+            </div> -->
+        
+
+          <!--{% for card in cards %}
+            {{ card|safe }}
+          {% endfor %}-->
+
+
+
+
+          <!--<div class="card shadow-sm">
+
+            
+            
+            <div class="card-body">
+              
+              <p class="card-text">This is</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Invia</button>
+                </div>
+              </div>
+            </div>
+          </div>-->
+        </div>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 " id="name">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+</footer>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<!-- script per nascondere il pulsante upload se non è ancora stata selezionata una foto -->
+<script>
+  // Add the following code if you want the name of the file appear on select
+  $(".custom-file-input").on("change", function() {
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+  });
+</script>
+
+<script>
+$(document).ready(function() {
+
+  let photo = document.getElementById('photo');
+  let button = document.getElementById('button');
+
+  photo.addEventListener("input", function() {
+    button.disabled = (this.value === '');
+  })
+
+  // Funzione per ottenere la lista di immagini caricate
+  function getImages() {
+    $.get('/images', function(data) {
+      console.log(data);
+      if (data.immagini != ''){// Aggiungi le immagini al contenuto dell'elemento "image-container"
+      //var images = data.immagini.split(',');
+
+      document.getElementById('sfondoazzurro').classList.add('bg-light');
+      //inserisci le immagini caricate e riconosciute
+        for(var i = 0; i < data.immagini.length; i++) {
+          $('#image-container').append('<div class="col " style="width: 40rem"> <img class="card-img-top" src="static/edited/' + data.immagini[i] + '" class="card-img-top"> </div>')
+        }
+        $('#image-container').append('<div class="col-sm " > Nella foto compaiono: <ul style="margin-top:10px" class="list-group" id="name"></ul></div>')
+        //stampa i nomi delle persone presenti nella foto
+        for(var i = 0; i < data.nomi.length; i++) {
+            $('#name').append('<li class="list-group-item">'+ data.nomi[i] +'<form style="float-right; margin-top: -25px" class="form-inline" method="POST" action="/sendemail/' + data.nomi[i] + '" enctype="multipart/form-data"><button type = "submit" class = "btn btn-primary" style = "float:right" data-toggle="modal" data-target="#ModalEmail">Send Email</button></form></li>')
+            //<button style = "float:right">send a fucking email</button>
+            // <input type="submit" value="send a fucking email">
+        }     
+      }
+      
+
+      
+      //$('#image-container').append('<div class="col-sm " > Nella foto compaiono: <ul><li></li></ul></div>')
+    });
+  }
+  /*function getnames() {
+    $.get('/names', function(data) {
+      if (data != ''){// Aggiungo i nomi delle persone che compaiono nella foto"
+        console.log(data)
+        $('#image-container').append('<div class="col-sm " > Nella foto compaiono: <ul style="margin-top:10px" class="list-group" id="name"></ul></div>')
+        // var images = data.split(',');
+        for(var i = 0; i < data.length && data[i] != ''; i++) {
+          $('#name').append('<li class="list-group-item">'+ data[i] +'<form style="float-right; margin-top: -25px" class="form-inline" method="POST" action="/sendemail" enctype="multipart/form-data"><button type = "submit" class = "btn btn-primary" style = "float:right">send a fucking email</button></form></li>')
+          //<button style = "float:right">send a fucking email</button>
+          // <input type="submit" value="send a fucking email">
+        }     
+      }
+    });
+  } */
+  // Aggiorna la lista di immagini quando la pagina viene caricata
+  getImages();
+  //getnames();
+  // Aggiorna la lista di immagini quando una nuova immagine viene caricata
+
+
+  //si triggera quando viene schiacciato il bottone di upload
+  $('form').submit(function(e) {
+    
+    e.preventDefault();
+    var form_data = new FormData(this);
+    $.ajax({
+      url: '/upload',
+      type: 'POST',
+      data: form_data,
+      contentType: false,
+      cache: false,
+      processData: false,
+      success: function(filename) {
+        $('#image-container').append('<img src="' + filename + '">');
+        //ricarico l'immagine
+        getImages();
+        uploadComplete();
+      }
+    });
+  });
+});
+</script>
+
+<script>
+  function uploadComplete() {
+    location.reload();
+  }
+</script>
+
+
+      
+  </body>
+</html>

@@ -1,0 +1,33 @@
+version: '3'
+services:
+  face-rec:
+    image: docker-face-rec
+    build: ./face-rec
+    networks:
+      - my-network
+    restart: "no"
+    command: ["python", "main.py"]
+  mail:
+    image: docker-mail
+    build: ./mail
+    depends_on:
+      - face-rec
+    networks:
+      - my-network
+    restart: "no"
+    command: ["./wait-for-it.sh", "face-rec:50051", "--", "python", "sendemail.py"]
+  app:
+    image: docker-app
+    build: ./app
+    depends_on:
+      - face-rec
+      - mail
+    ports:
+      - "8080:5000"
+    networks:
+      - my-network
+    restart: "no"
+    command: ["./wait-for-it.sh", "face-rec:50051", "--", "python", "server.py"]
+  
+networks:
+  my-network:

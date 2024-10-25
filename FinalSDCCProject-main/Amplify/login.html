@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Face Detector</title>
+
+    
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+    
+ 
+    
+  </head>
+  <body class="text-center">
+
+    
+    
+    <main class="form-signin" style="width: 30%; margin-left: 35%;">
+      <form id="myForm">
+      
+        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+        <div class="form-floating">
+          <input type="email" id="email_address" name="email_address" class="form-control" placeholder="name@example.com" required/>
+          <label  for="email_address">Email address</label>
+        </div>
+        <!-- Email Password input -->
+        <div class="form-floating">
+          <input type="text" id="email_password" name="email_password" class="form-control" required/>
+          <label class="form-label" for="email_password">Email Password</label>
+        </div>
+
+        <!-- AWS acess key input -->
+        <div class="form-floating">
+            <input type="text" id="aws_accesskey" name="aws_accesskey" class="form-control" required/>
+            <label class="form-label" for="aws_accesskey">AWS Access Key</label>
+        </div>
+
+        <!-- AWS access key ID input -->
+        <div class="form-floating">
+            <input type="text" id="aws_accesskey_id" name="aws_accesskey_id" class="form-control" required/>
+            <label class="form-label" for="aws_accesskey_id">AWS Access Key ID</label>
+        </div>
+
+          <!-- AWS Session token input -->
+        <div class="form-floating">
+            <input type="text" id="aws_session_token" name="aws_session_token" class="form-control" required />
+            <label class="form-label" for="aws_session_token">AWS Session Token</label>
+        </div>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+      </form>
+    </main>
+
+
+    <script>
+      function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+          var date = new Date();
+          date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+          expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + value + expires + "; path=/";
+      }
+
+      document.getElementById("myForm").addEventListener("submit", function(event) {
+        event.preventDefault(); 
+  
+        var form = event.target;
+        var formData = new FormData(form);
+  
+        var data = {};
+        for (var [key, value] of formData.entries()) {
+          data[key] = value;
+        }
+  
+        var jsonData = JSON.stringify(data);
+  
+        var xhr = new XMLHttpRequest();
+        var url = "https://3z6sfpqr1c.execute-api.us-east-1.amazonaws.com/beta/login";
+  
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+  
+        xhr.onreadystatechange = function () {
+          console.log(xhr.readyState);
+          console.log(xhr.status);
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            value = response["key"];
+            //console.log(response);
+            setCookie("key", value, 1);
+            window.location.href = "index.html";
+          }else if(xhr.readyState === 4 && xhr.status != 200) {
+            var response = JSON.parse(xhr.responseText);
+            errore = response["error"];
+
+            //inserire un pop up che indica che c'è stato un errore con il messaggio contenuto in errore
+            alert(errore);
+            message = response["e"];
+          }
+        };
+  
+        xhr.send(jsonData);
+      });
+    </script>
+
+  </body>
+</html>

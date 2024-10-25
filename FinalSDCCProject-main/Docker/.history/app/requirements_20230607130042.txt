@@ -1,0 +1,12 @@
+Flask==2.0.3
+pika==1.3.1
+MarkupSafe==2.0.1
+Jinja2==3.1.1
+Werkzeug==2.0.3
+boto3
+urllib3
+uuid
+flask_socketio
+gunicorn
+simple-websocket
+flask-redis

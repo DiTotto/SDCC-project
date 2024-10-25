@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Login</title>
+
+    
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    
+  </head>
+  <body class="text-center">
+    
+    <main class="form-signin" style="width: 30%; margin-left: 35%;">
+      
+      <form id="loginForm" action="{{ url_for('home') }}" method="POST" onsubmit="setCookieFromForm('loginForm', 'loginCookie');">
+      
+        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+        <div class="form-floating">
+          <input type="email" id="email_address" name="email_address" class="form-control" placeholder="name@example.com" required/>
+          <label  for="email_address">Email address</label>
+        </div>
+        <!-- Email Password input -->
+        <div class="form-floating">
+          <input type="text" id="email_password" name="email_password" class="form-control" required/>
+          <label class="form-label" for="email_password">Email Password</label>
+        </div>
+
+        <!-- AWS acess key input -->
+        <div class="form-floating">
+            <input type="text" id="aws_accesskey" name="aws_accesskey" class="form-control" required/>
+            <label class="form-label" for="aws_accesskey">AWS Access Key</label>
+        </div>
+
+        <!-- AWS access key ID input -->
+        <div class="form-floating">
+            <input type="text" id="aws_accesskey_id" name="aws_accesskey_id" class="form-control" required/>
+            <label class="form-label" for="aws_accesskey_id">AWS Access Key ID</label>
+        </div>
+
+          <!-- AWS Session token input -->
+        <div class="form-floating">
+            <input type="text" id="aws_session_token" name="aws_session_token" class="form-control" required />
+            <label class="form-label" for="aws_session_token">AWS Session Token</label>
+        </div>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+      </form>
+    </main>
+
+  </body>
+</html>
+
+
+<script>
+  function setCookieFromForm(formId, cookieName) {
+  var form = document.getElementById(formId);
+  var formData = new FormData(form);
+
+  // Crea una stringa di cookie utilizzando i dati del modulo
+  var formDataObject = {};
+
+  for (var pair of formData.entries()) {
+    formDataObject[pair[0]] = pair[1];
+    document.cookie = pair[0] + '=' + pair[1];
+  }
+
+  // Convertire l'oggetto in formato JSON
+  var cookieValue = JSON.stringify(formDataObject);
+}
+</script>
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    deleteCookies();
+  });
+
+  function deleteCookies() {
+  // Verifica se ci sono cookie presenti
+  if (document.cookie && document.cookie !== '') {
+    var cookies = document.cookie.split(';');
+    // Itera sui cookie e li elimina
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i];
+      var eqPos = cookie.indexOf('=');
+      var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+      document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;';
+    }
+  }
+}
+</script>

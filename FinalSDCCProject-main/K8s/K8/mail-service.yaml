@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mail-service
+  labels:
+    app: my-appz
+spec:
+  selector:
+    app: my-appz
+  ports:
+    - name: grpc
+      protocol: TCP
+      port: 50052
+      targetPort: 50052
+  type: LoadBalancer

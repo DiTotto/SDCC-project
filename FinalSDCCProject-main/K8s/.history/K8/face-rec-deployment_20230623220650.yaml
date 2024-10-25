@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: face-rec-deployment
+  labels:
+    io.kompose.service: face-rec
+    app: my-apps
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-apps
+  template:
+    metadata:
+      labels:
+        app: my-apps
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: face-rec
+          image: lucamjdimarco/docker-face-rec:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - "python"
+            - "main.py"
+          resources:
+            limits:
+              cpu: "1.5"
+              memory: 1.5Gi
+            requests:
+              cpu: "1"
+              memory: 1Gi 

@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package unary;
+
+service ImageService {
+  rpc UploadFile(JsonDati) returns (Nomi);
+}
+
+service EmailService {
+    rpc SendEmail(JsonAddress) returns (Response);
+}
+
+message Response {
+    string response = 1;
+}
+
+message JsonAddress {
+    string json_address = 1;
+}
+
+message JsonDati {
+    string json_data = 1;
+}
+
+message Nomi {
+    string nomi = 1;
+}
